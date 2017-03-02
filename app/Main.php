@@ -55,8 +55,9 @@ class Main extends TelegramApp\Module {
 		if(file_exists("users.txt") && is_readable("users.txt")){
 			$fp = fopen("users.txt", "r");
 			while(!feof($fp)){
-				$u = explode(",", fgets($fp, 32));
-				$users[$u[0]] = $u[1];
+				$u = explode(",", fgets($fp, 32), 2);
+				if(empty($u) or count($u) != 2){ continue; }
+				$users[$u[0]] = filter_var($u[1], FILTER_SANITIZE_NUMBER_INT);
 			}
 			fclose($fp);
 		}
