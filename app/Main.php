@@ -18,16 +18,44 @@ class Main extends TelegramApp\Module {
 						$name = substr($f, 0, -4);
 
 						$class = "PhoneDict\\$name";
-						$find = new $class($phone);
+						$find = new $class($tel);
 						if($find->result){
-							$this->telegram->send
-								->text("Se ha encontrado en $name")
-							->send();
+							$this->show_phone_info($find, 4);
 						}
 					}
 				}
 			}
 		}
+	}
+
+	private function show_phone_info($obj, $maxrews = 0, $offset = 0){
+		$str = "<b>$obj->site</b> - " .date("d/m/Y H:i:s", strtotime($obj->date)) ." "; // ."\n";
+				// ."Valoración: ";
+
+		if($obj->rating <= 4){ $str .= $this->telegram->emoji(":ok:"); }
+		elseif($obj->rating > 4 && $obj->rating < 6){ $str .= $this->telegram->emoji(":warning:"); }
+		elseif($obj->rating > 6){ $str .= $this->telegram->emoji(":times:"); }
+
+		$str .= "\n" .@$obj->name ."\n";
+		// TODO offset
+		$reviews = array();
+		if($maxrews == 0){ $reviews = $obj->reviews; }
+
+		elseif($maxrews > 0){
+			$c = 0;
+			foreach($obj->reviews as $rev){
+				if($c >= $maxrews){ break; }
+				$reviews[] = $rev;
+			}
+		}
+
+		foreach($reviews as $rev){
+			$str .= $rev ."\n\n";
+		}
+
+		return $this->telegram->send
+			->text($str, 'HTML')
+		->send();
 	}
 
 	public function start(){
