@@ -74,7 +74,9 @@ class QueTelefono extends CallerStruct {
 
 			}
 
-			$this->rating = array_sum($this->rating) / count($this->rating);
+			if($this->rating != NULL){
+				$this->rating = array_sum($this->rating) / count($this->rating);
+			}
 			if(!empty($this->reviews)){ $this->result = TRUE; }
 		}
 	}

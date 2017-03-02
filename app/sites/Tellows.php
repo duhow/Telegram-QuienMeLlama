@@ -31,14 +31,14 @@ class Tellows extends CallerStruct {
 		$search = array();
 		while($pos !== FALSE && $pos != $lastpos){
 			$lastpos = $pos;
-			$pos = strpos($web, '<li id=', $pos);
+			$pos = strpos($web, '<li id=', $pos + 1);
 			if($pos != $lastpos){
 				$search[] = $pos;
 			}
 		}
 
 		if(!empty($search)){
-			foreach($search as $compos){
+			foreach($search as $pos){
 				$pos = strpos($web, '<div id="score" class="realscore', $pos) + 32; // strlen;
 				$rating = substr($web, $pos, 18);
 				$rating = strip_tags($rating);
@@ -72,7 +72,9 @@ class Tellows extends CallerStruct {
 				}
 			}
 
-			$this->rating = array_sum($this->rating) / count($this->rating);
+			if($this->rating != NULL){
+				$this->rating = array_sum($this->rating) / count($this->rating);
+			}
 			if(!empty($this->reviews)){ $this->result = TRUE; }
 		}
 	}
