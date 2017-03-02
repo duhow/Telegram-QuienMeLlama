@@ -24,7 +24,7 @@ class GuiaTelefonicaInversa extends CallerStruct {
 		$search = array();
 		while($pos !== FALSE && $pos != $lastpos){
 			$lastpos = $pos;
-			$pos = strpos($web, '<tr class="rank', $pos);
+			$pos = strpos($web, '<tr class="rank', $pos + 1);
 			if($pos != $lastpos){
 				$search[] = $pos;
 			}
@@ -38,7 +38,7 @@ class GuiaTelefonicaInversa extends CallerStruct {
 				$rating = filter_var($rating, FILTER_SANITIZE_NUMBER_INT);
 
 				if(!empty($rating)){
-					$this->rating[] = (($rating * 2) - 1);
+					$this->rating[] = 8 - ($rating * 2);
 				}
 
 				$pos = strpos($web, 'datePublished', $pos) + strlen('datePublished" content="');
