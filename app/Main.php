@@ -8,7 +8,7 @@ class Main extends TelegramApp\Module {
 
 			if(is_numeric($tel) && strlen($tel) == 9){
 				$q = $this->telegram->send
-					->text($this->telegram->emoji(":clock: ") ."Buscando...")
+					->text($this->telegram->emoji("\ud83d\udd51 ") ."Buscando...")
 				->send();
 
 				require "app/CallerStruct.php";
