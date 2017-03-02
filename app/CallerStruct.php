@@ -1,5 +1,7 @@
 <?php
 
+namespace PhoneDict;
+
 class CallerStruct {
 	public $result = FALSE;
 

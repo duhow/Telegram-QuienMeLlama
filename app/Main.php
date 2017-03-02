@@ -11,12 +11,14 @@ class Main extends TelegramApp\Module {
 					->text($this->telegram->emoji(":clock: ") ."Buscando...")
 				->send();
 
+				require "app/CallerStruct.php";
 				foreach(scandir("app/sites/") as $f){
 					if(is_readable("app/sites/$f") && substr($f, -4) == ".php"){
 						require "app/sites/$f";
 						$name = substr($f, 0, -4);
 
-						$find = new PhoneDict\{$name}($phone);
+						$class = "PhoneDict\\$name";
+						$find = new $class($phone);
 						if($find->result){
 							$this->telegram->send
 								->text("Se ha encontrado en $name")
