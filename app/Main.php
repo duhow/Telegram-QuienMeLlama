@@ -7,7 +7,7 @@ class Main extends TelegramApp\Module {
 			$tel = str_replace([" ", "-", "+"], "", $tel);
 
 			if(is_numeric($tel) && strlen($tel) == 9){
-				$this->telegram->send
+				$q = $this->telegram->send
 					->text($this->telegram->emoji(":clock: ") ."Buscando...")
 				->send();
 
@@ -31,7 +31,13 @@ class Main extends TelegramApp\Module {
 					$this->telegram->send
 						->text("Se devuelven los $res primeros resultados.")
 					->send();
+				}elseif($res == 0){
+					$this->telegram->send
+						->message($q['message_id'])
+						->text("No se han encontrado coincidencias para el teléfono $tel.")
+					->edit("text");
 				}
+				$this->end();
 			}
 		}
 	}
