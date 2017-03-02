@@ -7,6 +7,14 @@ class Main extends TelegramApp\Module {
 			$tel = str_replace([" ", "-", "+"], "", $tel);
 
 			if(is_numeric($tel) && strlen($tel) == 9){
+				if(!$this->check_user_available($this->telegram->user->id)){
+					$this->telegram->send
+						->text($this->telegram->emoji(":warning: has superado el límite diario."))
+					->send();
+
+					$this->end();
+				}
+
 				$q = $this->telegram->send
 					->text($this->telegram->emoji("\ud83d\udd51 ") ."Buscando...")
 				->send();
@@ -40,6 +48,34 @@ class Main extends TelegramApp\Module {
 				$this->end();
 			}
 		}
+	}
+
+	private function check_user_available($user, $limit = 3){
+		$users = array();
+		if(file_exists("users.txt") && is_readable("users.txt")){
+			$file = file_get_contents("users.txt");
+			$data = explode("\n", $file);
+			foreach($data as $u){
+				$p = explode(",", $u);
+				$users[$u[0]] = $u[1];
+			}
+			unset($data);
+			unset($file);
+		}
+
+		if(isset($user, array_keys($users))){
+			if($users[$user] >= $limit){ return FALSE; }
+		}
+
+		@$users[$user]++;
+
+		$data = "";
+		foreach($users as $u => $p){
+			$data .= "$u,$p\n";
+		}
+
+		file_put_contents("users.txt", $data);
+		return TRUE;
 	}
 
 	private function show_phone_info($obj, $maxrews = 0, $offset = 0){
