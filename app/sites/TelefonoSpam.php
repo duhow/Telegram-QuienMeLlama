@@ -30,7 +30,9 @@ class TelefonoSpam extends CallerStruct {
 			foreach($search as $pos){
 				$pos = strpos($web, " hace ", $pos);
 				$pos = strpos($web, "<em", $pos);
-				$lim = strpos($web, "</em>", $pos);
+				$pos = strpos($web, "<br />", $pos);
+				$pos = strpos($web, "<em", $pos);
+				$lim = strpos($web, "</em>", $pos) - $pos;
 
 				$comment = substr($web, $pos, $lim);
 				$comment = html_entity_decode($comment); // Accents
