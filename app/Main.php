@@ -45,6 +45,11 @@ class Main extends TelegramApp\Module {
 			foreach($obj->reviews as $rev){
 				if($c >= $maxrews){ break; }
 				$reviews[] = $rev;
+				$c++;
+			}
+
+			if(count($reviews) > 1){
+				unset($reviews[count($reviews) - 1]); // Last duplicates
 			}
 		}
 
