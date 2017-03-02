@@ -31,12 +31,13 @@ class TelefonoSpam extends CallerStruct {
 				$pos = strpos($web, " hace ", $pos);
 				$pos = strpos($web, "<em", $pos);
 				$pos = strpos($web, "<br />", $pos);
-				$pos = strpos($web, "<em", $pos);
+				$pos = strpos($web, "<em", $pos) + strlen("<em>");
 				$lim = strpos($web, "</em>", $pos) - $pos;
 
 				$comment = substr($web, $pos, $lim);
 				$comment = html_entity_decode($comment); // Accents
 				$comment = strip_tags($comment); // Remove HTML
+				$comment = utf8_encode($comment); // FIXME
 				$comment = trim($comment);
 
 				if(!empty($comment)){
