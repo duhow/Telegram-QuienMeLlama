@@ -53,18 +53,16 @@ class Main extends TelegramApp\Module {
 	private function check_user_available($user, $limit = 3){
 		$users = array();
 		if(file_exists("users.txt") && is_readable("users.txt")){
-			$file = file_get_contents("users.txt");
-			$data = explode("\n", $file);
-			foreach($data as $u){
-				$p = explode(",", $u);
+			$fp = fopen("users.txt", "r");
+			while(!feof($fp)){
+				$u = explode(",", fgets($fp, 32));
 				$users[$u[0]] = $u[1];
 			}
-			unset($data);
-			unset($file);
+			fclose($fp);
 		}
 
 		$ukey = array_keys($users);
-		if(isset($user, $users)){
+		if(isset($user, $ukey)){
 			if($users[$user] >= $limit){ return FALSE; }
 		}
 
