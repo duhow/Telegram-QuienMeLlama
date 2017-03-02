@@ -9,7 +9,7 @@ class Main extends TelegramApp\Module {
 			if(is_numeric($tel) && strlen($tel) == 9){
 				if(!$this->check_user_available($this->telegram->user->id)){
 					$this->telegram->send
-						->text($this->telegram->emoji(":warning: has superado el límite diario."))
+						->text($this->telegram->emoji(":warning: Has superado el límite diario."))
 					->send();
 
 					$this->end();
@@ -53,13 +53,18 @@ class Main extends TelegramApp\Module {
 	private function check_user_available($user, $limit = 3){
 		$users = array();
 		if(file_exists("users.txt") && is_readable("users.txt")){
-			$fp = fopen("users.txt", "r");
-			while(!feof($fp)){
-				$u = explode(",", fgets($fp, 32), 2);
-				if(empty($u) or count($u) != 2){ continue; }
-				$users[$u[0]] = filter_var($u[1], FILTER_SANITIZE_NUMBER_INT);
+			$date = filemtime("users.txt");
+			if(date("d") != date("d", $date)){
+				unlink("users.txt");
+			}else{
+				$fp = fopen("users.txt", "r");
+				while(!feof($fp)){
+					$u = explode(",", fgets($fp, 32), 2);
+					if(empty($u) or count($u) != 2){ continue; }
+					$users[$u[0]] = filter_var($u[1], FILTER_SANITIZE_NUMBER_INT);
+				}
+				fclose($fp);
 			}
-			fclose($fp);
 		}
 
 		$ukey = array_keys($users);
