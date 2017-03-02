@@ -2,7 +2,7 @@
 
 namespace PhoneDict;
 
-class ListaSpam extends CallerStruct {
+class LlamadaSospechosa extends CallerStruct {
 	public $site = "Llamada Sospechosa";
 
 	public function query($phone){
