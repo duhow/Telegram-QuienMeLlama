@@ -12,7 +12,9 @@ class Main extends TelegramApp\Module {
 				->send();
 
 				require "app/CallerStruct.php";
+				$res = 0;
 				foreach(scandir("app/sites/") as $f){
+					if($res >= 3){ break; } // HACK LIMIT
 					if(is_readable("app/sites/$f") && substr($f, -4) == ".php"){
 						require "app/sites/$f";
 						$name = substr($f, 0, -4);
@@ -21,8 +23,14 @@ class Main extends TelegramApp\Module {
 						$find = new $class($tel);
 						if($find->result){
 							$this->show_phone_info($find, 4);
+							$res++;
 						}
 					}
+				}
+				if($res >= 3){
+					$this->telegram->send
+						->text("Se devuelven los $res primeros resultados.")
+					->send();
 				}
 			}
 		}
