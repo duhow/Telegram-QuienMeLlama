@@ -43,9 +43,12 @@ class Main extends TelegramApp\Module {
 	}
 
 	private function show_phone_info($obj, $maxrews = 0, $offset = 0){
-		$str = "<b>$obj->site</b> - " .date("d/m/Y H:i:s", strtotime($obj->date)) ." Val: " .round($obj->rating, 2) ." ";
+		$str = "<b>$obj->site</b> - ";
+		if(!empty($obj->date)){ $str .= date("d/m/Y H:i:s", strtotime($obj->date)); }
+		$str .= " Val: " .round($obj->rating, 2) ." ";
 
-		if($obj->rating <= 4){ $str .= $this->telegram->emoji(":ok:"); }
+		if($obj->rating == 0 or $obj->rating == NULL){ $str .= $this->telegram->emoji(":question-red:"); }
+		elseif($obj->rating <= 4){ $str .= $this->telegram->emoji(":ok:"); }
 		elseif($obj->rating > 4 && $obj->rating < 6){ $str .= $this->telegram->emoji(":warning:"); }
 		elseif($obj->rating > 6){ $str .= $this->telegram->emoji(":times:"); }
 
