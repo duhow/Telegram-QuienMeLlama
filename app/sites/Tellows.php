@@ -3,6 +3,7 @@
 namespace PhoneDict;
 
 class Tellows extends CallerStruct {
+	public $site = "Tellows";
 
 	public function query($phone){
 		$url = "https://www.tellows.es/num/$phone?mobile=1";
@@ -38,7 +39,7 @@ class Tellows extends CallerStruct {
 
 		if(!empty($search)){
 			foreach($search as $compos){
-				$pos = strpos($web, '<div id="score" class="realscore', $pos) + 32 // strlen;
+				$pos = strpos($web, '<div id="score" class="realscore', $pos) + 32; // strlen;
 				$rating = substr($web, $pos, 18);
 				$rating = strip_tags($rating);
 				$rating = filter_var($rating, FILTER_SANITIZE_NUMBER_INT);
