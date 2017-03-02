@@ -66,7 +66,8 @@ class Main extends TelegramApp\Module {
 			}
 
 			if(count($reviews) > 1){
-				unset($reviews[count($reviews) - 1]); // Last duplicates
+				$n = count($reviews) - 1;
+				if($reviews[0] == $reviews[$n]){ unset($reviews[$n]); }
 			}
 		}
 
