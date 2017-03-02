@@ -21,7 +21,9 @@ class Main extends TelegramApp\Module {
 
 				require "app/CallerStruct.php";
 				$res = 0;
-				foreach(scandir("app/sites/") as $f){
+				$files = scandir("app/sites/");
+				shuffle($files);
+				foreach($files as $f){
 					if($res >= 3){ break; } // HACK LIMIT
 					if(is_readable("app/sites/$f") && substr($f, -4) == ".php"){
 						require "app/sites/$f";
@@ -42,7 +44,7 @@ class Main extends TelegramApp\Module {
 				}elseif($res == 0){
 					$this->telegram->send
 						->message($q['message_id'])
-						->text("No se han encontrado coincidencias para el teléfono $tel.")
+						->text($this->telegram->emoji(":times:") ." No se han encontrado coincidencias para el teléfono $tel.")
 					->edit("text");
 				}
 				$this->end();
@@ -89,7 +91,7 @@ class Main extends TelegramApp\Module {
 
 	private function show_phone_info($obj, $maxrews = 0, $offset = 0){
 		$str = "<b>$obj->site</b> - ";
-		if(!empty($obj->date)){ $str .= date("d/m/Y H:i:s", strtotime($obj->date)); }
+		if(!empty($obj->date) and strtotime($obj->date) != FALSE){ $str .= date("d/m/Y H:i:s", strtotime($obj->date)); }
 		$str .= " Val: " .round($obj->rating, 2) ." ";
 
 		if($obj->rating == 0 or $obj->rating == NULL){ $str .= $this->telegram->emoji(":question-red:"); }
