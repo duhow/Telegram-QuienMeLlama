@@ -47,7 +47,7 @@ class GuiaTelefonicaInversa extends CallerStruct {
 				$date = trim($date);
 				$date = strtotime($date);
 
-				if($date > 0){
+				if($date != FALSE && $date > 0){
 					$this->date = date("Y-m-d H:i:s", strtotime($date));
 				}
 

@@ -29,8 +29,7 @@ class Main extends TelegramApp\Module {
 	}
 
 	private function show_phone_info($obj, $maxrews = 0, $offset = 0){
-		$str = "<b>$obj->site</b> - " .date("d/m/Y H:i:s", strtotime($obj->date)) ." "; // ."\n";
-				// ."Valoración: ";
+		$str = "<b>$obj->site</b> - " .date("d/m/Y H:i:s", strtotime($obj->date)) ." Val: " .round($obj->rating, 2) ." ";
 
 		if($obj->rating <= 4){ $str .= $this->telegram->emoji(":ok:"); }
 		elseif($obj->rating > 4 && $obj->rating < 6){ $str .= $this->telegram->emoji(":warning:"); }
@@ -49,6 +48,7 @@ class Main extends TelegramApp\Module {
 			}
 		}
 
+		$str .= "\n";
 		foreach($reviews as $rev){
 			$str .= $rev ."\n\n";
 		}
