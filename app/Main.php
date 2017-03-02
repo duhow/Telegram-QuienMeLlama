@@ -63,11 +63,16 @@ class Main extends TelegramApp\Module {
 			unset($file);
 		}
 
-		if(isset($user, array_keys($users))){
+		$ukey = array_keys($users);
+		if(isset($user, $users)){
 			if($users[$user] >= $limit){ return FALSE; }
 		}
 
-		@$users[$user]++;
+		if(!isset($users[$user])){
+			$users[$user] = 1;
+		}else{
+			$users[$user]++;
+		}
 
 		$data = "";
 		foreach($users as $u => $p){
