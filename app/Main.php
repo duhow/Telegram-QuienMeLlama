@@ -16,15 +16,16 @@ class Main extends TelegramApp\Module {
 				}
 
 				$q = $this->telegram->send
-					->text($this->telegram->emoji("\ud83d\udd51 ") ."Buscando...")
+					->text($this->telegram->emoji(":clock2: ") ."Buscando...")
 				->send();
 
-				require "app/CallerStruct.php";
+				require "app/sites/_CallerStruct.php";
 				$res = 0;
 				$files = scandir("app/sites/");
 				shuffle($files);
 				foreach($files as $f){
 					if($res >= 3){ break; } // HACK LIMIT
+					if(strpos($f, "_CallerStruct") !== FALSE){ continue; }
 					if(is_readable("app/sites/$f") && substr($f, -4) == ".php"){
 						require "app/sites/$f";
 						$name = substr($f, 0, -4);
@@ -94,10 +95,10 @@ class Main extends TelegramApp\Module {
 		if(!empty($obj->date) and strtotime($obj->date) != FALSE){ $str .= date("d/m/Y H:i:s", strtotime($obj->date)); }
 		$str .= " Val: " .round($obj->rating, 2) ." ";
 
-		if($obj->rating == 0 or $obj->rating == NULL){ $str .= $this->telegram->emoji(":question-red:"); }
-		elseif($obj->rating <= 4){ $str .= $this->telegram->emoji(":ok:"); }
+		if($obj->rating == 0 or $obj->rating == NULL){ $str .= $this->telegram->emoji(":question:"); }
+		elseif($obj->rating <= 4){ $str .= $this->telegram->emoji(":white_check_mark:"); }
 		elseif($obj->rating > 4 && $obj->rating < 6){ $str .= $this->telegram->emoji(":warning:"); }
-		elseif($obj->rating > 6){ $str .= $this->telegram->emoji(":times:"); }
+		elseif($obj->rating > 6){ $str .= $this->telegram->emoji(":x:"); }
 
 		$str .= "\n" .@$obj->name ."\n";
 		// TODO offset
