@@ -6,7 +6,7 @@ class ListaSpam extends CallerStruct {
 	public $site = "Lista Spam";
 
 	public function query($phone){
-		$url = "http://www.listaspam.com/busca.php?Telefono=$phone";
+		$url = "https://www.listaspam.com/busca.php?Telefono=$phone";
 		$web = file_get_contents($url);
 
 		if(

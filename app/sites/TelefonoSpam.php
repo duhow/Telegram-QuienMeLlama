@@ -6,7 +6,7 @@ class TelefonoSpam extends CallerStruct {
 	public $site = "TelefonoSpam";
 
 	public function query($phone){
-		$url = "http://www.telefonospam.es/$phone";
+		$url = "https://www.telefonospam.es/$phone";
 		$web = file_get_contents($url);
 
 		if(strpos($web, "no ha sido comentado") !== FALSE){

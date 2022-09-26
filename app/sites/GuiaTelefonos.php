@@ -6,7 +6,7 @@ class GuiaTelefonos extends CallerStruct {
 	public $site = "Guía Telefonos";
 
 	public function query($phone){
-		$url = "http://guia-telefonos.com/$phone";
+		$url = "https://guia-telefonos.com/$phone";
 		$web = file_get_contents($url);
 
 		if(strpos($web, "No hay comentarios para este") !== FALSE){

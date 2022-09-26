@@ -6,7 +6,7 @@ class LlamadaSospechosa extends CallerStruct {
 	public $site = "Llamada Sospechosa";
 
 	public function query($phone){
-		$url = "http://llamadasospechosa.com/telefono-celular-movil-$phone";
+		$url = "https://llamadasospechosa.com/telefono-celular-movil-$phone";
 		$web = file_get_contents($url);
 
 		if(
