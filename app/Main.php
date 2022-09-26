@@ -1,5 +1,9 @@
 <?php
 
+if(!defined("USAGE_LIMIT_AMOUNT")){
+	define("USAGE_LIMIT_AMOUNT", 3);
+}
+
 class Main extends TelegramApp\Module {
 	protected function hooks(){
 		if($this->telegram->words() == 1){
@@ -13,7 +17,7 @@ class Main extends TelegramApp\Module {
 	}
 
 	private function process_phone_number($tel){
-		if(!$this->check_user_available($this->telegram->user->id)){
+		if(!$this->check_user_available($this->telegram->user->id, USAGE_LIMIT_AMOUNT)){
 			$this->telegram->send
 				->text($this->telegram->emoji(":warning: Has superado el límite diario."))
 			->send();
