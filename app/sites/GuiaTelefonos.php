@@ -4,6 +4,7 @@ namespace PhoneDict;
 
 class GuiaTelefonos extends CallerStruct {
 	public $site = "Guía Telefonos";
+	public $enabled = FALSE; // response takes 30s
 
 	public function query($phone){
 		$url = "https://guia-telefonos.com/$phone";

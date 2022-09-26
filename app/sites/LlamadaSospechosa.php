@@ -4,6 +4,7 @@ namespace PhoneDict;
 
 class LlamadaSospechosa extends CallerStruct {
 	public $site = "Llamada Sospechosa";
+	public $enabled = FALSE; // timeout 60s
 
 	public function query($phone){
 		$url = "https://llamadasospechosa.com/telefono-celular-movil-$phone";
