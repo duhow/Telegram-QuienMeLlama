@@ -7,50 +7,54 @@ class Main extends TelegramApp\Module {
 			$tel = str_replace([" ", "-", "+"], "", $tel);
 
 			if(is_numeric($tel) && strlen($tel) == 9){
-				if(!$this->check_user_available($this->telegram->user->id)){
-					$this->telegram->send
-						->text($this->telegram->emoji(":warning: Has superado el límite diario."))
-					->send();
-
-					$this->end();
-				}
-
-				$q = $this->telegram->send
-					->text($this->telegram->emoji(":clock2: ") ."Buscando...")
-				->send();
-
-				require "app/sites/_CallerStruct.php";
-				$res = 0;
-				$files = scandir("app/sites/");
-				shuffle($files);
-				foreach($files as $f){
-					if($res >= 3){ break; } // HACK LIMIT
-					if(strpos($f, "_CallerStruct") !== FALSE){ continue; }
-					if(is_readable("app/sites/$f") && substr($f, -4) == ".php"){
-						require "app/sites/$f";
-						$name = substr($f, 0, -4);
-
-						$class = "PhoneDict\\$name";
-						$find = new $class($tel);
-						if($find->result){
-							$this->show_phone_info($find, 4);
-							$res++;
-						}
-					}
-				}
-				if($res >= 3){
-					$this->telegram->send
-						->text("Se devuelven los $res primeros resultados.")
-					->send();
-				}elseif($res == 0){
-					$this->telegram->send
-						->message($q['message_id'])
-						->text($this->telegram->emoji(":times:") ." No se han encontrado coincidencias para el teléfono $tel.")
-					->edit("text");
-				}
-				$this->end();
+				return $this->process_phone_number($tel);
 			}
 		}
+	}
+
+	private function process_phone_number($tel){
+		if(!$this->check_user_available($this->telegram->user->id)){
+			$this->telegram->send
+				->text($this->telegram->emoji(":warning: Has superado el límite diario."))
+			->send();
+
+			$this->end();
+		}
+
+		$q = $this->telegram->send
+			->text($this->telegram->emoji(":clock2: ") ."Buscando...")
+		->send();
+
+		require "app/sites/_CallerStruct.php";
+		$res = 0;
+		$files = scandir("app/sites/");
+		shuffle($files);
+		foreach($files as $f){
+			if($res >= 3){ break; } // HACK LIMIT
+			if(strpos($f, "_CallerStruct") !== FALSE){ continue; }
+			if(is_readable("app/sites/$f") && substr($f, -4) == ".php"){
+				require "app/sites/$f";
+				$name = substr($f, 0, -4);
+
+				$class = "PhoneDict\\$name";
+				$find = new $class($tel);
+				if($find->result){
+					$this->show_phone_info($find, 4);
+					$res++;
+				}
+			}
+		}
+		if($res >= 3){
+			$this->telegram->send
+				->text("Se devuelven los $res primeros resultados.")
+			->send();
+		}elseif($res == 0){
+			$this->telegram->send
+				->message($q['message_id'])
+				->text($this->telegram->emoji(":times:") ." No se han encontrado coincidencias para el teléfono $tel.")
+			->edit("text");
+		}
+		$this->end();
 	}
 
 	private function check_user_available($user, $limit = 3){
