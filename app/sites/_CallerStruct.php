@@ -2,8 +2,11 @@
 
 namespace PhoneDict;
 
+define("PHONEDICT_DEBUG", TRUE);
+
 class CallerStruct {
 	public $result = FALSE;
+	public $enabled = TRUE;
 
 	public $phone = NULL;
 	public $name = NULL;
@@ -18,9 +21,19 @@ class CallerStruct {
 	protected function query($phone){ }
 
 	public function __construct($phone = NULL){
-		if(!empty($phone)){
-			$this->phone = $phone;
-			$this->query($phone);
+		if(empty($phone)){ return; }
+		if(!$this->enabled){ return; }
+
+		if(PHONEDICT_DEBUG){
+			error_log("Starting review in " .$this->site);
+			$time = microtime(true);
+		}
+
+		$this->phone = $phone;
+		$this->query($phone);
+
+		if(PHONEDICT_DEBUG){
+			error_log("Review " .$this->site ." took " . round((microtime(true) - $time)*1000) ."ms");
 		}
 	}
 }
