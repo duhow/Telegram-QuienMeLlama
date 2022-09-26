@@ -75,15 +75,13 @@ class Main extends TelegramApp\Module {
 		}
 
 		$ukey = array_keys($users);
-		if(isset($user, $ukey)){
+		if(in_array($user, $ukey)){
 			if($users[$user] >= $limit){ return FALSE; }
+			$users[$user]++;
+		}else{
+			$users[$user] = 1;
 		}
 
-		if(!isset($users[$user])){
-			$users[$user] = 1;
-		}else{
-			$users[$user]++;
-		}
 
 		$data = "";
 		foreach($users as $u => $p){
